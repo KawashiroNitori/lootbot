@@ -1,10 +1,10 @@
 CREATE TABLE IF NOT EXISTS `loot` (
-    `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+    `id` BIGINT PRIMARY KEY AUTOINCREMENT,
     `name` VARCHAR(255) NOT NULL,
     `role` TINYINT NOT NULL,
     `job` TINYINT NOT NULL,
-    `slot` TINYINT NOT NULL,
-    `item_id` INTEGER NOT NULL,
+    `category` TINYINT NOT NULL,
+    `item_id` BIGINT NOT NULL,
     `item_name` VARCHAR(255) NOT NULL,
     `is_obtained` TINYINT NOT NULL DEFAULT 0
 );
