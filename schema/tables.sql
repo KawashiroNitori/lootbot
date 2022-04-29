@@ -1,10 +1,14 @@
 CREATE TABLE IF NOT EXISTS `loot` (
     `id` BIGINT PRIMARY KEY AUTOINCREMENT,
-    `name` VARCHAR(255) NOT NULL,
+    `player_name` VARCHAR(255) NOT NULL,
+    `player_server` VARCHAR(255) NOT NULL,
     `role` TINYINT NOT NULL,
     `job` TINYINT NOT NULL,
     `category` TINYINT NOT NULL,
     `item_id` BIGINT NOT NULL,
     `item_name` VARCHAR(255) NOT NULL,
-    `is_obtained` TINYINT NOT NULL DEFAULT 0
+    `is_obtained` TINYINT NOT NULL DEFAULT 0,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `obtained_at` TIMESTAMP NULL DEFAULT NULL
 );

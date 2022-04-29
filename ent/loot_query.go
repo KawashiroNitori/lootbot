@@ -254,12 +254,12 @@ func (lq *LootQuery) Clone() *LootQuery {
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		PlayerName string `json:"player_name,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Loot.Query().
-//		GroupBy(loot.FieldName).
+//		GroupBy(loot.FieldPlayerName).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -281,11 +281,11 @@ func (lq *LootQuery) GroupBy(field string, fields ...string) *LootGroupBy {
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		PlayerName string `json:"player_name,omitempty"`
 //	}
 //
 //	client.Loot.Query().
-//		Select(loot.FieldName).
+//		Select(loot.FieldPlayerName).
 //		Scan(ctx, &v)
 //
 func (lq *LootQuery) Select(fields ...string) *LootSelect {

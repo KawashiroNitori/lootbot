@@ -3,6 +3,8 @@
 package loot
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
 	"github.com/KawashiroNitori/lootbot/ent/predicate"
 	"github.com/KawashiroNitori/lootbot/internal/macro"
@@ -91,29 +93,85 @@ func IDLTE(id int64) predicate.Loot {
 	})
 }
 
-// Name applies equality check predicate on the "name" field. It's identical to NameEQ.
-func Name(v string) predicate.Loot {
+// PlayerName applies equality check predicate on the "player_name" field. It's identical to PlayerNameEQ.
+func PlayerName(v string) predicate.Loot {
 	return predicate.Loot(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldName), v))
+		s.Where(sql.EQ(s.C(FieldPlayerName), v))
 	})
 }
 
-// NameEQ applies the EQ predicate on the "name" field.
-func NameEQ(v string) predicate.Loot {
+// PlayerServer applies equality check predicate on the "player_server" field. It's identical to PlayerServerEQ.
+func PlayerServer(v string) predicate.Loot {
 	return predicate.Loot(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldName), v))
+		s.Where(sql.EQ(s.C(FieldPlayerServer), v))
 	})
 }
 
-// NameNEQ applies the NEQ predicate on the "name" field.
-func NameNEQ(v string) predicate.Loot {
+// PartyID applies equality check predicate on the "party_id" field. It's identical to PartyIDEQ.
+func PartyID(v int64) predicate.Loot {
 	return predicate.Loot(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldName), v))
+		s.Where(sql.EQ(s.C(FieldPartyID), v))
 	})
 }
 
-// NameIn applies the In predicate on the "name" field.
-func NameIn(vs ...string) predicate.Loot {
+// ItemID applies equality check predicate on the "item_id" field. It's identical to ItemIDEQ.
+func ItemID(v int64) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldItemID), v))
+	})
+}
+
+// ItemName applies equality check predicate on the "item_name" field. It's identical to ItemNameEQ.
+func ItemName(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldItemName), v))
+	})
+}
+
+// IsObtained applies equality check predicate on the "is_obtained" field. It's identical to IsObtainedEQ.
+func IsObtained(v bool) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldIsObtained), v))
+	})
+}
+
+// CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
+func CreatedAt(v time.Time) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCreatedAt), v))
+	})
+}
+
+// UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
+func UpdatedAt(v time.Time) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldUpdatedAt), v))
+	})
+}
+
+// ObtainedAt applies equality check predicate on the "obtained_at" field. It's identical to ObtainedAtEQ.
+func ObtainedAt(v time.Time) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldObtainedAt), v))
+	})
+}
+
+// PlayerNameEQ applies the EQ predicate on the "player_name" field.
+func PlayerNameEQ(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPlayerName), v))
+	})
+}
+
+// PlayerNameNEQ applies the NEQ predicate on the "player_name" field.
+func PlayerNameNEQ(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldPlayerName), v))
+	})
+}
+
+// PlayerNameIn applies the In predicate on the "player_name" field.
+func PlayerNameIn(vs ...string) predicate.Loot {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -125,12 +183,12 @@ func NameIn(vs ...string) predicate.Loot {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.In(s.C(FieldName), v...))
+		s.Where(sql.In(s.C(FieldPlayerName), v...))
 	})
 }
 
-// NameNotIn applies the NotIn predicate on the "name" field.
-func NameNotIn(vs ...string) predicate.Loot {
+// PlayerNameNotIn applies the NotIn predicate on the "player_name" field.
+func PlayerNameNotIn(vs ...string) predicate.Loot {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -142,70 +200,257 @@ func NameNotIn(vs ...string) predicate.Loot {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.NotIn(s.C(FieldName), v...))
+		s.Where(sql.NotIn(s.C(FieldPlayerName), v...))
 	})
 }
 
-// NameGT applies the GT predicate on the "name" field.
-func NameGT(v string) predicate.Loot {
+// PlayerNameGT applies the GT predicate on the "player_name" field.
+func PlayerNameGT(v string) predicate.Loot {
 	return predicate.Loot(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldName), v))
+		s.Where(sql.GT(s.C(FieldPlayerName), v))
 	})
 }
 
-// NameGTE applies the GTE predicate on the "name" field.
-func NameGTE(v string) predicate.Loot {
+// PlayerNameGTE applies the GTE predicate on the "player_name" field.
+func PlayerNameGTE(v string) predicate.Loot {
 	return predicate.Loot(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldName), v))
+		s.Where(sql.GTE(s.C(FieldPlayerName), v))
 	})
 }
 
-// NameLT applies the LT predicate on the "name" field.
-func NameLT(v string) predicate.Loot {
+// PlayerNameLT applies the LT predicate on the "player_name" field.
+func PlayerNameLT(v string) predicate.Loot {
 	return predicate.Loot(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldName), v))
+		s.Where(sql.LT(s.C(FieldPlayerName), v))
 	})
 }
 
-// NameLTE applies the LTE predicate on the "name" field.
-func NameLTE(v string) predicate.Loot {
+// PlayerNameLTE applies the LTE predicate on the "player_name" field.
+func PlayerNameLTE(v string) predicate.Loot {
 	return predicate.Loot(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldName), v))
+		s.Where(sql.LTE(s.C(FieldPlayerName), v))
 	})
 }
 
-// NameContains applies the Contains predicate on the "name" field.
-func NameContains(v string) predicate.Loot {
+// PlayerNameContains applies the Contains predicate on the "player_name" field.
+func PlayerNameContains(v string) predicate.Loot {
 	return predicate.Loot(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldName), v))
+		s.Where(sql.Contains(s.C(FieldPlayerName), v))
 	})
 }
 
-// NameHasPrefix applies the HasPrefix predicate on the "name" field.
-func NameHasPrefix(v string) predicate.Loot {
+// PlayerNameHasPrefix applies the HasPrefix predicate on the "player_name" field.
+func PlayerNameHasPrefix(v string) predicate.Loot {
 	return predicate.Loot(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldName), v))
+		s.Where(sql.HasPrefix(s.C(FieldPlayerName), v))
 	})
 }
 
-// NameHasSuffix applies the HasSuffix predicate on the "name" field.
-func NameHasSuffix(v string) predicate.Loot {
+// PlayerNameHasSuffix applies the HasSuffix predicate on the "player_name" field.
+func PlayerNameHasSuffix(v string) predicate.Loot {
 	return predicate.Loot(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldName), v))
+		s.Where(sql.HasSuffix(s.C(FieldPlayerName), v))
 	})
 }
 
-// NameEqualFold applies the EqualFold predicate on the "name" field.
-func NameEqualFold(v string) predicate.Loot {
+// PlayerNameEqualFold applies the EqualFold predicate on the "player_name" field.
+func PlayerNameEqualFold(v string) predicate.Loot {
 	return predicate.Loot(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldName), v))
+		s.Where(sql.EqualFold(s.C(FieldPlayerName), v))
 	})
 }
 
-// NameContainsFold applies the ContainsFold predicate on the "name" field.
-func NameContainsFold(v string) predicate.Loot {
+// PlayerNameContainsFold applies the ContainsFold predicate on the "player_name" field.
+func PlayerNameContainsFold(v string) predicate.Loot {
 	return predicate.Loot(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldName), v))
+		s.Where(sql.ContainsFold(s.C(FieldPlayerName), v))
+	})
+}
+
+// PlayerServerEQ applies the EQ predicate on the "player_server" field.
+func PlayerServerEQ(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPlayerServer), v))
+	})
+}
+
+// PlayerServerNEQ applies the NEQ predicate on the "player_server" field.
+func PlayerServerNEQ(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldPlayerServer), v))
+	})
+}
+
+// PlayerServerIn applies the In predicate on the "player_server" field.
+func PlayerServerIn(vs ...string) predicate.Loot {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Loot(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldPlayerServer), v...))
+	})
+}
+
+// PlayerServerNotIn applies the NotIn predicate on the "player_server" field.
+func PlayerServerNotIn(vs ...string) predicate.Loot {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Loot(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldPlayerServer), v...))
+	})
+}
+
+// PlayerServerGT applies the GT predicate on the "player_server" field.
+func PlayerServerGT(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldPlayerServer), v))
+	})
+}
+
+// PlayerServerGTE applies the GTE predicate on the "player_server" field.
+func PlayerServerGTE(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldPlayerServer), v))
+	})
+}
+
+// PlayerServerLT applies the LT predicate on the "player_server" field.
+func PlayerServerLT(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldPlayerServer), v))
+	})
+}
+
+// PlayerServerLTE applies the LTE predicate on the "player_server" field.
+func PlayerServerLTE(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldPlayerServer), v))
+	})
+}
+
+// PlayerServerContains applies the Contains predicate on the "player_server" field.
+func PlayerServerContains(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldPlayerServer), v))
+	})
+}
+
+// PlayerServerHasPrefix applies the HasPrefix predicate on the "player_server" field.
+func PlayerServerHasPrefix(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldPlayerServer), v))
+	})
+}
+
+// PlayerServerHasSuffix applies the HasSuffix predicate on the "player_server" field.
+func PlayerServerHasSuffix(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldPlayerServer), v))
+	})
+}
+
+// PlayerServerEqualFold applies the EqualFold predicate on the "player_server" field.
+func PlayerServerEqualFold(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldPlayerServer), v))
+	})
+}
+
+// PlayerServerContainsFold applies the ContainsFold predicate on the "player_server" field.
+func PlayerServerContainsFold(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldPlayerServer), v))
+	})
+}
+
+// PartyIDEQ applies the EQ predicate on the "party_id" field.
+func PartyIDEQ(v int64) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPartyID), v))
+	})
+}
+
+// PartyIDNEQ applies the NEQ predicate on the "party_id" field.
+func PartyIDNEQ(v int64) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldPartyID), v))
+	})
+}
+
+// PartyIDIn applies the In predicate on the "party_id" field.
+func PartyIDIn(vs ...int64) predicate.Loot {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Loot(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldPartyID), v...))
+	})
+}
+
+// PartyIDNotIn applies the NotIn predicate on the "party_id" field.
+func PartyIDNotIn(vs ...int64) predicate.Loot {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Loot(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldPartyID), v...))
+	})
+}
+
+// PartyIDGT applies the GT predicate on the "party_id" field.
+func PartyIDGT(v int64) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldPartyID), v))
+	})
+}
+
+// PartyIDGTE applies the GTE predicate on the "party_id" field.
+func PartyIDGTE(v int64) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldPartyID), v))
+	})
+}
+
+// PartyIDLT applies the LT predicate on the "party_id" field.
+func PartyIDLT(v int64) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldPartyID), v))
+	})
+}
+
+// PartyIDLTE applies the LTE predicate on the "party_id" field.
+func PartyIDLTE(v int64) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldPartyID), v))
 	})
 }
 
@@ -254,6 +499,545 @@ func RoleNotIn(vs ...macro.Role) predicate.Loot {
 			return
 		}
 		s.Where(sql.NotIn(s.C(FieldRole), v...))
+	})
+}
+
+// JobEQ applies the EQ predicate on the "job" field.
+func JobEQ(v macro.Job) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldJob), v))
+	})
+}
+
+// JobNEQ applies the NEQ predicate on the "job" field.
+func JobNEQ(v macro.Job) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldJob), v))
+	})
+}
+
+// JobIn applies the In predicate on the "job" field.
+func JobIn(vs ...macro.Job) predicate.Loot {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Loot(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldJob), v...))
+	})
+}
+
+// JobNotIn applies the NotIn predicate on the "job" field.
+func JobNotIn(vs ...macro.Job) predicate.Loot {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Loot(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldJob), v...))
+	})
+}
+
+// CategoryEQ applies the EQ predicate on the "category" field.
+func CategoryEQ(v macro.Category) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCategory), v))
+	})
+}
+
+// CategoryNEQ applies the NEQ predicate on the "category" field.
+func CategoryNEQ(v macro.Category) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldCategory), v))
+	})
+}
+
+// CategoryIn applies the In predicate on the "category" field.
+func CategoryIn(vs ...macro.Category) predicate.Loot {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Loot(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldCategory), v...))
+	})
+}
+
+// CategoryNotIn applies the NotIn predicate on the "category" field.
+func CategoryNotIn(vs ...macro.Category) predicate.Loot {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Loot(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldCategory), v...))
+	})
+}
+
+// ItemIDEQ applies the EQ predicate on the "item_id" field.
+func ItemIDEQ(v int64) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldItemID), v))
+	})
+}
+
+// ItemIDNEQ applies the NEQ predicate on the "item_id" field.
+func ItemIDNEQ(v int64) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldItemID), v))
+	})
+}
+
+// ItemIDIn applies the In predicate on the "item_id" field.
+func ItemIDIn(vs ...int64) predicate.Loot {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Loot(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldItemID), v...))
+	})
+}
+
+// ItemIDNotIn applies the NotIn predicate on the "item_id" field.
+func ItemIDNotIn(vs ...int64) predicate.Loot {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Loot(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldItemID), v...))
+	})
+}
+
+// ItemIDGT applies the GT predicate on the "item_id" field.
+func ItemIDGT(v int64) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldItemID), v))
+	})
+}
+
+// ItemIDGTE applies the GTE predicate on the "item_id" field.
+func ItemIDGTE(v int64) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldItemID), v))
+	})
+}
+
+// ItemIDLT applies the LT predicate on the "item_id" field.
+func ItemIDLT(v int64) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldItemID), v))
+	})
+}
+
+// ItemIDLTE applies the LTE predicate on the "item_id" field.
+func ItemIDLTE(v int64) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldItemID), v))
+	})
+}
+
+// ItemNameEQ applies the EQ predicate on the "item_name" field.
+func ItemNameEQ(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldItemName), v))
+	})
+}
+
+// ItemNameNEQ applies the NEQ predicate on the "item_name" field.
+func ItemNameNEQ(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldItemName), v))
+	})
+}
+
+// ItemNameIn applies the In predicate on the "item_name" field.
+func ItemNameIn(vs ...string) predicate.Loot {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Loot(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldItemName), v...))
+	})
+}
+
+// ItemNameNotIn applies the NotIn predicate on the "item_name" field.
+func ItemNameNotIn(vs ...string) predicate.Loot {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Loot(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldItemName), v...))
+	})
+}
+
+// ItemNameGT applies the GT predicate on the "item_name" field.
+func ItemNameGT(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldItemName), v))
+	})
+}
+
+// ItemNameGTE applies the GTE predicate on the "item_name" field.
+func ItemNameGTE(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldItemName), v))
+	})
+}
+
+// ItemNameLT applies the LT predicate on the "item_name" field.
+func ItemNameLT(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldItemName), v))
+	})
+}
+
+// ItemNameLTE applies the LTE predicate on the "item_name" field.
+func ItemNameLTE(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldItemName), v))
+	})
+}
+
+// ItemNameContains applies the Contains predicate on the "item_name" field.
+func ItemNameContains(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldItemName), v))
+	})
+}
+
+// ItemNameHasPrefix applies the HasPrefix predicate on the "item_name" field.
+func ItemNameHasPrefix(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldItemName), v))
+	})
+}
+
+// ItemNameHasSuffix applies the HasSuffix predicate on the "item_name" field.
+func ItemNameHasSuffix(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldItemName), v))
+	})
+}
+
+// ItemNameEqualFold applies the EqualFold predicate on the "item_name" field.
+func ItemNameEqualFold(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldItemName), v))
+	})
+}
+
+// ItemNameContainsFold applies the ContainsFold predicate on the "item_name" field.
+func ItemNameContainsFold(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldItemName), v))
+	})
+}
+
+// IsObtainedEQ applies the EQ predicate on the "is_obtained" field.
+func IsObtainedEQ(v bool) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldIsObtained), v))
+	})
+}
+
+// IsObtainedNEQ applies the NEQ predicate on the "is_obtained" field.
+func IsObtainedNEQ(v bool) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldIsObtained), v))
+	})
+}
+
+// CreatedAtEQ applies the EQ predicate on the "created_at" field.
+func CreatedAtEQ(v time.Time) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCreatedAt), v))
+	})
+}
+
+// CreatedAtNEQ applies the NEQ predicate on the "created_at" field.
+func CreatedAtNEQ(v time.Time) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldCreatedAt), v))
+	})
+}
+
+// CreatedAtIn applies the In predicate on the "created_at" field.
+func CreatedAtIn(vs ...time.Time) predicate.Loot {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Loot(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldCreatedAt), v...))
+	})
+}
+
+// CreatedAtNotIn applies the NotIn predicate on the "created_at" field.
+func CreatedAtNotIn(vs ...time.Time) predicate.Loot {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Loot(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldCreatedAt), v...))
+	})
+}
+
+// CreatedAtGT applies the GT predicate on the "created_at" field.
+func CreatedAtGT(v time.Time) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldCreatedAt), v))
+	})
+}
+
+// CreatedAtGTE applies the GTE predicate on the "created_at" field.
+func CreatedAtGTE(v time.Time) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldCreatedAt), v))
+	})
+}
+
+// CreatedAtLT applies the LT predicate on the "created_at" field.
+func CreatedAtLT(v time.Time) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldCreatedAt), v))
+	})
+}
+
+// CreatedAtLTE applies the LTE predicate on the "created_at" field.
+func CreatedAtLTE(v time.Time) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldCreatedAt), v))
+	})
+}
+
+// UpdatedAtEQ applies the EQ predicate on the "updated_at" field.
+func UpdatedAtEQ(v time.Time) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldUpdatedAt), v))
+	})
+}
+
+// UpdatedAtNEQ applies the NEQ predicate on the "updated_at" field.
+func UpdatedAtNEQ(v time.Time) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldUpdatedAt), v))
+	})
+}
+
+// UpdatedAtIn applies the In predicate on the "updated_at" field.
+func UpdatedAtIn(vs ...time.Time) predicate.Loot {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Loot(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldUpdatedAt), v...))
+	})
+}
+
+// UpdatedAtNotIn applies the NotIn predicate on the "updated_at" field.
+func UpdatedAtNotIn(vs ...time.Time) predicate.Loot {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Loot(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldUpdatedAt), v...))
+	})
+}
+
+// UpdatedAtGT applies the GT predicate on the "updated_at" field.
+func UpdatedAtGT(v time.Time) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldUpdatedAt), v))
+	})
+}
+
+// UpdatedAtGTE applies the GTE predicate on the "updated_at" field.
+func UpdatedAtGTE(v time.Time) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldUpdatedAt), v))
+	})
+}
+
+// UpdatedAtLT applies the LT predicate on the "updated_at" field.
+func UpdatedAtLT(v time.Time) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldUpdatedAt), v))
+	})
+}
+
+// UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
+func UpdatedAtLTE(v time.Time) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldUpdatedAt), v))
+	})
+}
+
+// ObtainedAtEQ applies the EQ predicate on the "obtained_at" field.
+func ObtainedAtEQ(v time.Time) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldObtainedAt), v))
+	})
+}
+
+// ObtainedAtNEQ applies the NEQ predicate on the "obtained_at" field.
+func ObtainedAtNEQ(v time.Time) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldObtainedAt), v))
+	})
+}
+
+// ObtainedAtIn applies the In predicate on the "obtained_at" field.
+func ObtainedAtIn(vs ...time.Time) predicate.Loot {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Loot(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldObtainedAt), v...))
+	})
+}
+
+// ObtainedAtNotIn applies the NotIn predicate on the "obtained_at" field.
+func ObtainedAtNotIn(vs ...time.Time) predicate.Loot {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Loot(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldObtainedAt), v...))
+	})
+}
+
+// ObtainedAtGT applies the GT predicate on the "obtained_at" field.
+func ObtainedAtGT(v time.Time) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldObtainedAt), v))
+	})
+}
+
+// ObtainedAtGTE applies the GTE predicate on the "obtained_at" field.
+func ObtainedAtGTE(v time.Time) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldObtainedAt), v))
+	})
+}
+
+// ObtainedAtLT applies the LT predicate on the "obtained_at" field.
+func ObtainedAtLT(v time.Time) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldObtainedAt), v))
+	})
+}
+
+// ObtainedAtLTE applies the LTE predicate on the "obtained_at" field.
+func ObtainedAtLTE(v time.Time) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldObtainedAt), v))
+	})
+}
+
+// ObtainedAtIsNil applies the IsNil predicate on the "obtained_at" field.
+func ObtainedAtIsNil() predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldObtainedAt)))
+	})
+}
+
+// ObtainedAtNotNil applies the NotNil predicate on the "obtained_at" field.
+func ObtainedAtNotNil() predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldObtainedAt)))
 	})
 }
 

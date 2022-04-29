@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"sync"
+	"time"
 
 	"github.com/KawashiroNitori/lootbot/ent/loot"
 	"github.com/KawashiroNitori/lootbot/ent/predicate"
@@ -33,8 +34,20 @@ type LootMutation struct {
 	op            Op
 	typ           string
 	id            *int64
-	name          *string
+	player_name   *string
+	player_server *string
+	party_id      *int64
+	addparty_id   *int64
 	role          *macro.Role
+	job           *macro.Job
+	category      *macro.Category
+	item_id       *int64
+	additem_id    *int64
+	item_name     *string
+	is_obtained   *bool
+	created_at    *time.Time
+	updated_at    *time.Time
+	obtained_at   *time.Time
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*Loot, error)
@@ -145,40 +158,132 @@ func (m *LootMutation) IDs(ctx context.Context) ([]int64, error) {
 	}
 }
 
-// SetName sets the "name" field.
-func (m *LootMutation) SetName(s string) {
-	m.name = &s
+// SetPlayerName sets the "player_name" field.
+func (m *LootMutation) SetPlayerName(s string) {
+	m.player_name = &s
 }
 
-// Name returns the value of the "name" field in the mutation.
-func (m *LootMutation) Name() (r string, exists bool) {
-	v := m.name
+// PlayerName returns the value of the "player_name" field in the mutation.
+func (m *LootMutation) PlayerName() (r string, exists bool) {
+	v := m.player_name
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldName returns the old "name" field's value of the Loot entity.
+// OldPlayerName returns the old "player_name" field's value of the Loot entity.
 // If the Loot object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *LootMutation) OldName(ctx context.Context) (v string, err error) {
+func (m *LootMutation) OldPlayerName(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldName is only allowed on UpdateOne operations")
+		return v, errors.New("OldPlayerName is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldName requires an ID field in the mutation")
+		return v, errors.New("OldPlayerName requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldName: %w", err)
+		return v, fmt.Errorf("querying old value for OldPlayerName: %w", err)
 	}
-	return oldValue.Name, nil
+	return oldValue.PlayerName, nil
 }
 
-// ResetName resets all changes to the "name" field.
-func (m *LootMutation) ResetName() {
-	m.name = nil
+// ResetPlayerName resets all changes to the "player_name" field.
+func (m *LootMutation) ResetPlayerName() {
+	m.player_name = nil
+}
+
+// SetPlayerServer sets the "player_server" field.
+func (m *LootMutation) SetPlayerServer(s string) {
+	m.player_server = &s
+}
+
+// PlayerServer returns the value of the "player_server" field in the mutation.
+func (m *LootMutation) PlayerServer() (r string, exists bool) {
+	v := m.player_server
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPlayerServer returns the old "player_server" field's value of the Loot entity.
+// If the Loot object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LootMutation) OldPlayerServer(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPlayerServer is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPlayerServer requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPlayerServer: %w", err)
+	}
+	return oldValue.PlayerServer, nil
+}
+
+// ResetPlayerServer resets all changes to the "player_server" field.
+func (m *LootMutation) ResetPlayerServer() {
+	m.player_server = nil
+}
+
+// SetPartyID sets the "party_id" field.
+func (m *LootMutation) SetPartyID(i int64) {
+	m.party_id = &i
+	m.addparty_id = nil
+}
+
+// PartyID returns the value of the "party_id" field in the mutation.
+func (m *LootMutation) PartyID() (r int64, exists bool) {
+	v := m.party_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPartyID returns the old "party_id" field's value of the Loot entity.
+// If the Loot object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LootMutation) OldPartyID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPartyID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPartyID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPartyID: %w", err)
+	}
+	return oldValue.PartyID, nil
+}
+
+// AddPartyID adds i to the "party_id" field.
+func (m *LootMutation) AddPartyID(i int64) {
+	if m.addparty_id != nil {
+		*m.addparty_id += i
+	} else {
+		m.addparty_id = &i
+	}
+}
+
+// AddedPartyID returns the value that was added to the "party_id" field in this mutation.
+func (m *LootMutation) AddedPartyID() (r int64, exists bool) {
+	v := m.addparty_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPartyID resets all changes to the "party_id" field.
+func (m *LootMutation) ResetPartyID() {
+	m.party_id = nil
+	m.addparty_id = nil
 }
 
 // SetRole sets the "role" field.
@@ -217,6 +322,327 @@ func (m *LootMutation) ResetRole() {
 	m.role = nil
 }
 
+// SetJob sets the "job" field.
+func (m *LootMutation) SetJob(value macro.Job) {
+	m.job = &value
+}
+
+// Job returns the value of the "job" field in the mutation.
+func (m *LootMutation) Job() (r macro.Job, exists bool) {
+	v := m.job
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldJob returns the old "job" field's value of the Loot entity.
+// If the Loot object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LootMutation) OldJob(ctx context.Context) (v macro.Job, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldJob is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldJob requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldJob: %w", err)
+	}
+	return oldValue.Job, nil
+}
+
+// ResetJob resets all changes to the "job" field.
+func (m *LootMutation) ResetJob() {
+	m.job = nil
+}
+
+// SetCategory sets the "category" field.
+func (m *LootMutation) SetCategory(value macro.Category) {
+	m.category = &value
+}
+
+// Category returns the value of the "category" field in the mutation.
+func (m *LootMutation) Category() (r macro.Category, exists bool) {
+	v := m.category
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCategory returns the old "category" field's value of the Loot entity.
+// If the Loot object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LootMutation) OldCategory(ctx context.Context) (v macro.Category, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCategory is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCategory requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCategory: %w", err)
+	}
+	return oldValue.Category, nil
+}
+
+// ResetCategory resets all changes to the "category" field.
+func (m *LootMutation) ResetCategory() {
+	m.category = nil
+}
+
+// SetItemID sets the "item_id" field.
+func (m *LootMutation) SetItemID(i int64) {
+	m.item_id = &i
+	m.additem_id = nil
+}
+
+// ItemID returns the value of the "item_id" field in the mutation.
+func (m *LootMutation) ItemID() (r int64, exists bool) {
+	v := m.item_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldItemID returns the old "item_id" field's value of the Loot entity.
+// If the Loot object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LootMutation) OldItemID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldItemID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldItemID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldItemID: %w", err)
+	}
+	return oldValue.ItemID, nil
+}
+
+// AddItemID adds i to the "item_id" field.
+func (m *LootMutation) AddItemID(i int64) {
+	if m.additem_id != nil {
+		*m.additem_id += i
+	} else {
+		m.additem_id = &i
+	}
+}
+
+// AddedItemID returns the value that was added to the "item_id" field in this mutation.
+func (m *LootMutation) AddedItemID() (r int64, exists bool) {
+	v := m.additem_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetItemID resets all changes to the "item_id" field.
+func (m *LootMutation) ResetItemID() {
+	m.item_id = nil
+	m.additem_id = nil
+}
+
+// SetItemName sets the "item_name" field.
+func (m *LootMutation) SetItemName(s string) {
+	m.item_name = &s
+}
+
+// ItemName returns the value of the "item_name" field in the mutation.
+func (m *LootMutation) ItemName() (r string, exists bool) {
+	v := m.item_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldItemName returns the old "item_name" field's value of the Loot entity.
+// If the Loot object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LootMutation) OldItemName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldItemName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldItemName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldItemName: %w", err)
+	}
+	return oldValue.ItemName, nil
+}
+
+// ResetItemName resets all changes to the "item_name" field.
+func (m *LootMutation) ResetItemName() {
+	m.item_name = nil
+}
+
+// SetIsObtained sets the "is_obtained" field.
+func (m *LootMutation) SetIsObtained(b bool) {
+	m.is_obtained = &b
+}
+
+// IsObtained returns the value of the "is_obtained" field in the mutation.
+func (m *LootMutation) IsObtained() (r bool, exists bool) {
+	v := m.is_obtained
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsObtained returns the old "is_obtained" field's value of the Loot entity.
+// If the Loot object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LootMutation) OldIsObtained(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsObtained is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsObtained requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsObtained: %w", err)
+	}
+	return oldValue.IsObtained, nil
+}
+
+// ResetIsObtained resets all changes to the "is_obtained" field.
+func (m *LootMutation) ResetIsObtained() {
+	m.is_obtained = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *LootMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *LootMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Loot entity.
+// If the Loot object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LootMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *LootMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *LootMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *LootMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Loot entity.
+// If the Loot object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LootMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *LootMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetObtainedAt sets the "obtained_at" field.
+func (m *LootMutation) SetObtainedAt(t time.Time) {
+	m.obtained_at = &t
+}
+
+// ObtainedAt returns the value of the "obtained_at" field in the mutation.
+func (m *LootMutation) ObtainedAt() (r time.Time, exists bool) {
+	v := m.obtained_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldObtainedAt returns the old "obtained_at" field's value of the Loot entity.
+// If the Loot object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LootMutation) OldObtainedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldObtainedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldObtainedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldObtainedAt: %w", err)
+	}
+	return oldValue.ObtainedAt, nil
+}
+
+// ClearObtainedAt clears the value of the "obtained_at" field.
+func (m *LootMutation) ClearObtainedAt() {
+	m.obtained_at = nil
+	m.clearedFields[loot.FieldObtainedAt] = struct{}{}
+}
+
+// ObtainedAtCleared returns if the "obtained_at" field was cleared in this mutation.
+func (m *LootMutation) ObtainedAtCleared() bool {
+	_, ok := m.clearedFields[loot.FieldObtainedAt]
+	return ok
+}
+
+// ResetObtainedAt resets all changes to the "obtained_at" field.
+func (m *LootMutation) ResetObtainedAt() {
+	m.obtained_at = nil
+	delete(m.clearedFields, loot.FieldObtainedAt)
+}
+
 // Where appends a list predicates to the LootMutation builder.
 func (m *LootMutation) Where(ps ...predicate.Loot) {
 	m.predicates = append(m.predicates, ps...)
@@ -236,12 +662,42 @@ func (m *LootMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *LootMutation) Fields() []string {
-	fields := make([]string, 0, 2)
-	if m.name != nil {
-		fields = append(fields, loot.FieldName)
+	fields := make([]string, 0, 12)
+	if m.player_name != nil {
+		fields = append(fields, loot.FieldPlayerName)
+	}
+	if m.player_server != nil {
+		fields = append(fields, loot.FieldPlayerServer)
+	}
+	if m.party_id != nil {
+		fields = append(fields, loot.FieldPartyID)
 	}
 	if m.role != nil {
 		fields = append(fields, loot.FieldRole)
+	}
+	if m.job != nil {
+		fields = append(fields, loot.FieldJob)
+	}
+	if m.category != nil {
+		fields = append(fields, loot.FieldCategory)
+	}
+	if m.item_id != nil {
+		fields = append(fields, loot.FieldItemID)
+	}
+	if m.item_name != nil {
+		fields = append(fields, loot.FieldItemName)
+	}
+	if m.is_obtained != nil {
+		fields = append(fields, loot.FieldIsObtained)
+	}
+	if m.created_at != nil {
+		fields = append(fields, loot.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, loot.FieldUpdatedAt)
+	}
+	if m.obtained_at != nil {
+		fields = append(fields, loot.FieldObtainedAt)
 	}
 	return fields
 }
@@ -251,10 +707,30 @@ func (m *LootMutation) Fields() []string {
 // schema.
 func (m *LootMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case loot.FieldName:
-		return m.Name()
+	case loot.FieldPlayerName:
+		return m.PlayerName()
+	case loot.FieldPlayerServer:
+		return m.PlayerServer()
+	case loot.FieldPartyID:
+		return m.PartyID()
 	case loot.FieldRole:
 		return m.Role()
+	case loot.FieldJob:
+		return m.Job()
+	case loot.FieldCategory:
+		return m.Category()
+	case loot.FieldItemID:
+		return m.ItemID()
+	case loot.FieldItemName:
+		return m.ItemName()
+	case loot.FieldIsObtained:
+		return m.IsObtained()
+	case loot.FieldCreatedAt:
+		return m.CreatedAt()
+	case loot.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case loot.FieldObtainedAt:
+		return m.ObtainedAt()
 	}
 	return nil, false
 }
@@ -264,10 +740,30 @@ func (m *LootMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *LootMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case loot.FieldName:
-		return m.OldName(ctx)
+	case loot.FieldPlayerName:
+		return m.OldPlayerName(ctx)
+	case loot.FieldPlayerServer:
+		return m.OldPlayerServer(ctx)
+	case loot.FieldPartyID:
+		return m.OldPartyID(ctx)
 	case loot.FieldRole:
 		return m.OldRole(ctx)
+	case loot.FieldJob:
+		return m.OldJob(ctx)
+	case loot.FieldCategory:
+		return m.OldCategory(ctx)
+	case loot.FieldItemID:
+		return m.OldItemID(ctx)
+	case loot.FieldItemName:
+		return m.OldItemName(ctx)
+	case loot.FieldIsObtained:
+		return m.OldIsObtained(ctx)
+	case loot.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case loot.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case loot.FieldObtainedAt:
+		return m.OldObtainedAt(ctx)
 	}
 	return nil, fmt.Errorf("unknown Loot field %s", name)
 }
@@ -277,12 +773,26 @@ func (m *LootMutation) OldField(ctx context.Context, name string) (ent.Value, er
 // type.
 func (m *LootMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case loot.FieldName:
+	case loot.FieldPlayerName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetName(v)
+		m.SetPlayerName(v)
+		return nil
+	case loot.FieldPlayerServer:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPlayerServer(v)
+		return nil
+	case loot.FieldPartyID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPartyID(v)
 		return nil
 	case loot.FieldRole:
 		v, ok := value.(macro.Role)
@@ -291,6 +801,62 @@ func (m *LootMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetRole(v)
 		return nil
+	case loot.FieldJob:
+		v, ok := value.(macro.Job)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetJob(v)
+		return nil
+	case loot.FieldCategory:
+		v, ok := value.(macro.Category)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCategory(v)
+		return nil
+	case loot.FieldItemID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetItemID(v)
+		return nil
+	case loot.FieldItemName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetItemName(v)
+		return nil
+	case loot.FieldIsObtained:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsObtained(v)
+		return nil
+	case loot.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case loot.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case loot.FieldObtainedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetObtainedAt(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Loot field %s", name)
 }
@@ -298,13 +864,26 @@ func (m *LootMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *LootMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addparty_id != nil {
+		fields = append(fields, loot.FieldPartyID)
+	}
+	if m.additem_id != nil {
+		fields = append(fields, loot.FieldItemID)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *LootMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case loot.FieldPartyID:
+		return m.AddedPartyID()
+	case loot.FieldItemID:
+		return m.AddedItemID()
+	}
 	return nil, false
 }
 
@@ -313,6 +892,20 @@ func (m *LootMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *LootMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case loot.FieldPartyID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPartyID(v)
+		return nil
+	case loot.FieldItemID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddItemID(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Loot numeric field %s", name)
 }
@@ -320,7 +913,11 @@ func (m *LootMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *LootMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(loot.FieldObtainedAt) {
+		fields = append(fields, loot.FieldObtainedAt)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -333,6 +930,11 @@ func (m *LootMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *LootMutation) ClearField(name string) error {
+	switch name {
+	case loot.FieldObtainedAt:
+		m.ClearObtainedAt()
+		return nil
+	}
 	return fmt.Errorf("unknown Loot nullable field %s", name)
 }
 
@@ -340,11 +942,41 @@ func (m *LootMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *LootMutation) ResetField(name string) error {
 	switch name {
-	case loot.FieldName:
-		m.ResetName()
+	case loot.FieldPlayerName:
+		m.ResetPlayerName()
+		return nil
+	case loot.FieldPlayerServer:
+		m.ResetPlayerServer()
+		return nil
+	case loot.FieldPartyID:
+		m.ResetPartyID()
 		return nil
 	case loot.FieldRole:
 		m.ResetRole()
+		return nil
+	case loot.FieldJob:
+		m.ResetJob()
+		return nil
+	case loot.FieldCategory:
+		m.ResetCategory()
+		return nil
+	case loot.FieldItemID:
+		m.ResetItemID()
+		return nil
+	case loot.FieldItemName:
+		m.ResetItemName()
+		return nil
+	case loot.FieldIsObtained:
+		m.ResetIsObtained()
+		return nil
+	case loot.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case loot.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case loot.FieldObtainedAt:
+		m.ResetObtainedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown Loot field %s", name)

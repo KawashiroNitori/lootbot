@@ -802,5 +802,6 @@ FodyWeavers.xsd
 
 # Custom
 
+bin/
 config.yaml
 userdata/*

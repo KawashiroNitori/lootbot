@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"time"
+
 	"github.com/KawashiroNitori/lootbot/ent/loot"
 	"github.com/KawashiroNitori/lootbot/ent/schema"
 )
@@ -13,8 +15,26 @@ import (
 func init() {
 	lootFields := schema.Loot{}.Fields()
 	_ = lootFields
-	// lootDescName is the schema descriptor for name field.
-	lootDescName := lootFields[1].Descriptor()
-	// loot.NameValidator is a validator for the "name" field. It is called by the builders before save.
-	loot.NameValidator = lootDescName.Validators[0].(func(string) error)
+	// lootDescPlayerName is the schema descriptor for player_name field.
+	lootDescPlayerName := lootFields[1].Descriptor()
+	// loot.PlayerNameValidator is a validator for the "player_name" field. It is called by the builders before save.
+	loot.PlayerNameValidator = lootDescPlayerName.Validators[0].(func(string) error)
+	// lootDescPlayerServer is the schema descriptor for player_server field.
+	lootDescPlayerServer := lootFields[2].Descriptor()
+	// loot.PlayerServerValidator is a validator for the "player_server" field. It is called by the builders before save.
+	loot.PlayerServerValidator = lootDescPlayerServer.Validators[0].(func(string) error)
+	// lootDescIsObtained is the schema descriptor for is_obtained field.
+	lootDescIsObtained := lootFields[9].Descriptor()
+	// loot.DefaultIsObtained holds the default value on creation for the is_obtained field.
+	loot.DefaultIsObtained = lootDescIsObtained.Default.(bool)
+	// lootDescCreatedAt is the schema descriptor for created_at field.
+	lootDescCreatedAt := lootFields[10].Descriptor()
+	// loot.DefaultCreatedAt holds the default value on creation for the created_at field.
+	loot.DefaultCreatedAt = lootDescCreatedAt.Default.(func() time.Time)
+	// lootDescUpdatedAt is the schema descriptor for updated_at field.
+	lootDescUpdatedAt := lootFields[11].Descriptor()
+	// loot.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	loot.DefaultUpdatedAt = lootDescUpdatedAt.Default.(func() time.Time)
+	// loot.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	loot.UpdateDefaultUpdatedAt = lootDescUpdatedAt.UpdateDefault.(func() time.Time)
 }

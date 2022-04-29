@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -28,15 +29,119 @@ func (lu *LootUpdate) Where(ps ...predicate.Loot) *LootUpdate {
 	return lu
 }
 
-// SetName sets the "name" field.
-func (lu *LootUpdate) SetName(s string) *LootUpdate {
-	lu.mutation.SetName(s)
+// SetPlayerName sets the "player_name" field.
+func (lu *LootUpdate) SetPlayerName(s string) *LootUpdate {
+	lu.mutation.SetPlayerName(s)
+	return lu
+}
+
+// SetPlayerServer sets the "player_server" field.
+func (lu *LootUpdate) SetPlayerServer(s string) *LootUpdate {
+	lu.mutation.SetPlayerServer(s)
+	return lu
+}
+
+// SetPartyID sets the "party_id" field.
+func (lu *LootUpdate) SetPartyID(i int64) *LootUpdate {
+	lu.mutation.ResetPartyID()
+	lu.mutation.SetPartyID(i)
+	return lu
+}
+
+// AddPartyID adds i to the "party_id" field.
+func (lu *LootUpdate) AddPartyID(i int64) *LootUpdate {
+	lu.mutation.AddPartyID(i)
 	return lu
 }
 
 // SetRole sets the "role" field.
 func (lu *LootUpdate) SetRole(m macro.Role) *LootUpdate {
 	lu.mutation.SetRole(m)
+	return lu
+}
+
+// SetJob sets the "job" field.
+func (lu *LootUpdate) SetJob(m macro.Job) *LootUpdate {
+	lu.mutation.SetJob(m)
+	return lu
+}
+
+// SetCategory sets the "category" field.
+func (lu *LootUpdate) SetCategory(m macro.Category) *LootUpdate {
+	lu.mutation.SetCategory(m)
+	return lu
+}
+
+// SetItemID sets the "item_id" field.
+func (lu *LootUpdate) SetItemID(i int64) *LootUpdate {
+	lu.mutation.ResetItemID()
+	lu.mutation.SetItemID(i)
+	return lu
+}
+
+// AddItemID adds i to the "item_id" field.
+func (lu *LootUpdate) AddItemID(i int64) *LootUpdate {
+	lu.mutation.AddItemID(i)
+	return lu
+}
+
+// SetItemName sets the "item_name" field.
+func (lu *LootUpdate) SetItemName(s string) *LootUpdate {
+	lu.mutation.SetItemName(s)
+	return lu
+}
+
+// SetIsObtained sets the "is_obtained" field.
+func (lu *LootUpdate) SetIsObtained(b bool) *LootUpdate {
+	lu.mutation.SetIsObtained(b)
+	return lu
+}
+
+// SetNillableIsObtained sets the "is_obtained" field if the given value is not nil.
+func (lu *LootUpdate) SetNillableIsObtained(b *bool) *LootUpdate {
+	if b != nil {
+		lu.SetIsObtained(*b)
+	}
+	return lu
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (lu *LootUpdate) SetCreatedAt(t time.Time) *LootUpdate {
+	lu.mutation.SetCreatedAt(t)
+	return lu
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (lu *LootUpdate) SetNillableCreatedAt(t *time.Time) *LootUpdate {
+	if t != nil {
+		lu.SetCreatedAt(*t)
+	}
+	return lu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (lu *LootUpdate) SetUpdatedAt(t time.Time) *LootUpdate {
+	lu.mutation.SetUpdatedAt(t)
+	return lu
+}
+
+// SetObtainedAt sets the "obtained_at" field.
+func (lu *LootUpdate) SetObtainedAt(t time.Time) *LootUpdate {
+	lu.mutation.SetObtainedAt(t)
+	return lu
+}
+
+// SetNillableObtainedAt sets the "obtained_at" field if the given value is not nil.
+func (lu *LootUpdate) SetNillableObtainedAt(t *time.Time) *LootUpdate {
+	if t != nil {
+		lu.SetObtainedAt(*t)
+	}
+	return lu
+}
+
+// ClearObtainedAt clears the value of the "obtained_at" field.
+func (lu *LootUpdate) ClearObtainedAt() *LootUpdate {
+	lu.mutation.ClearObtainedAt()
 	return lu
 }
 
@@ -51,6 +156,7 @@ func (lu *LootUpdate) Save(ctx context.Context) (int, error) {
 		err      error
 		affected int
 	)
+	lu.defaults()
 	if len(lu.hooks) == 0 {
 		if err = lu.check(); err != nil {
 			return 0, err
@@ -105,16 +211,39 @@ func (lu *LootUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (lu *LootUpdate) defaults() {
+	if _, ok := lu.mutation.UpdatedAt(); !ok {
+		v := loot.UpdateDefaultUpdatedAt()
+		lu.mutation.SetUpdatedAt(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (lu *LootUpdate) check() error {
-	if v, ok := lu.mutation.Name(); ok {
-		if err := loot.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Loot.name": %w`, err)}
+	if v, ok := lu.mutation.PlayerName(); ok {
+		if err := loot.PlayerNameValidator(v); err != nil {
+			return &ValidationError{Name: "player_name", err: fmt.Errorf(`ent: validator failed for field "Loot.player_name": %w`, err)}
+		}
+	}
+	if v, ok := lu.mutation.PlayerServer(); ok {
+		if err := loot.PlayerServerValidator(v); err != nil {
+			return &ValidationError{Name: "player_server", err: fmt.Errorf(`ent: validator failed for field "Loot.player_server": %w`, err)}
 		}
 	}
 	if v, ok := lu.mutation.Role(); ok {
 		if err := loot.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`ent: validator failed for field "Loot.role": %w`, err)}
+		}
+	}
+	if v, ok := lu.mutation.Job(); ok {
+		if err := loot.JobValidator(v); err != nil {
+			return &ValidationError{Name: "job", err: fmt.Errorf(`ent: validator failed for field "Loot.job": %w`, err)}
+		}
+	}
+	if v, ok := lu.mutation.Category(); ok {
+		if err := loot.CategoryValidator(v); err != nil {
+			return &ValidationError{Name: "category", err: fmt.Errorf(`ent: validator failed for field "Loot.category": %w`, err)}
 		}
 	}
 	return nil
@@ -138,11 +267,32 @@ func (lu *LootUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := lu.mutation.Name(); ok {
+	if value, ok := lu.mutation.PlayerName(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: loot.FieldName,
+			Column: loot.FieldPlayerName,
+		})
+	}
+	if value, ok := lu.mutation.PlayerServer(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: loot.FieldPlayerServer,
+		})
+	}
+	if value, ok := lu.mutation.PartyID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: loot.FieldPartyID,
+		})
+	}
+	if value, ok := lu.mutation.AddedPartyID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: loot.FieldPartyID,
 		})
 	}
 	if value, ok := lu.mutation.Role(); ok {
@@ -150,6 +300,75 @@ func (lu *LootUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Type:   field.TypeEnum,
 			Value:  value,
 			Column: loot.FieldRole,
+		})
+	}
+	if value, ok := lu.mutation.Job(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeEnum,
+			Value:  value,
+			Column: loot.FieldJob,
+		})
+	}
+	if value, ok := lu.mutation.Category(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeEnum,
+			Value:  value,
+			Column: loot.FieldCategory,
+		})
+	}
+	if value, ok := lu.mutation.ItemID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: loot.FieldItemID,
+		})
+	}
+	if value, ok := lu.mutation.AddedItemID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: loot.FieldItemID,
+		})
+	}
+	if value, ok := lu.mutation.ItemName(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: loot.FieldItemName,
+		})
+	}
+	if value, ok := lu.mutation.IsObtained(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: loot.FieldIsObtained,
+		})
+	}
+	if value, ok := lu.mutation.CreatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: loot.FieldCreatedAt,
+		})
+	}
+	if value, ok := lu.mutation.UpdatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: loot.FieldUpdatedAt,
+		})
+	}
+	if value, ok := lu.mutation.ObtainedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: loot.FieldObtainedAt,
+		})
+	}
+	if lu.mutation.ObtainedAtCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Column: loot.FieldObtainedAt,
 		})
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, lu.driver, _spec); err != nil {
@@ -171,15 +390,119 @@ type LootUpdateOne struct {
 	mutation *LootMutation
 }
 
-// SetName sets the "name" field.
-func (luo *LootUpdateOne) SetName(s string) *LootUpdateOne {
-	luo.mutation.SetName(s)
+// SetPlayerName sets the "player_name" field.
+func (luo *LootUpdateOne) SetPlayerName(s string) *LootUpdateOne {
+	luo.mutation.SetPlayerName(s)
+	return luo
+}
+
+// SetPlayerServer sets the "player_server" field.
+func (luo *LootUpdateOne) SetPlayerServer(s string) *LootUpdateOne {
+	luo.mutation.SetPlayerServer(s)
+	return luo
+}
+
+// SetPartyID sets the "party_id" field.
+func (luo *LootUpdateOne) SetPartyID(i int64) *LootUpdateOne {
+	luo.mutation.ResetPartyID()
+	luo.mutation.SetPartyID(i)
+	return luo
+}
+
+// AddPartyID adds i to the "party_id" field.
+func (luo *LootUpdateOne) AddPartyID(i int64) *LootUpdateOne {
+	luo.mutation.AddPartyID(i)
 	return luo
 }
 
 // SetRole sets the "role" field.
 func (luo *LootUpdateOne) SetRole(m macro.Role) *LootUpdateOne {
 	luo.mutation.SetRole(m)
+	return luo
+}
+
+// SetJob sets the "job" field.
+func (luo *LootUpdateOne) SetJob(m macro.Job) *LootUpdateOne {
+	luo.mutation.SetJob(m)
+	return luo
+}
+
+// SetCategory sets the "category" field.
+func (luo *LootUpdateOne) SetCategory(m macro.Category) *LootUpdateOne {
+	luo.mutation.SetCategory(m)
+	return luo
+}
+
+// SetItemID sets the "item_id" field.
+func (luo *LootUpdateOne) SetItemID(i int64) *LootUpdateOne {
+	luo.mutation.ResetItemID()
+	luo.mutation.SetItemID(i)
+	return luo
+}
+
+// AddItemID adds i to the "item_id" field.
+func (luo *LootUpdateOne) AddItemID(i int64) *LootUpdateOne {
+	luo.mutation.AddItemID(i)
+	return luo
+}
+
+// SetItemName sets the "item_name" field.
+func (luo *LootUpdateOne) SetItemName(s string) *LootUpdateOne {
+	luo.mutation.SetItemName(s)
+	return luo
+}
+
+// SetIsObtained sets the "is_obtained" field.
+func (luo *LootUpdateOne) SetIsObtained(b bool) *LootUpdateOne {
+	luo.mutation.SetIsObtained(b)
+	return luo
+}
+
+// SetNillableIsObtained sets the "is_obtained" field if the given value is not nil.
+func (luo *LootUpdateOne) SetNillableIsObtained(b *bool) *LootUpdateOne {
+	if b != nil {
+		luo.SetIsObtained(*b)
+	}
+	return luo
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (luo *LootUpdateOne) SetCreatedAt(t time.Time) *LootUpdateOne {
+	luo.mutation.SetCreatedAt(t)
+	return luo
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (luo *LootUpdateOne) SetNillableCreatedAt(t *time.Time) *LootUpdateOne {
+	if t != nil {
+		luo.SetCreatedAt(*t)
+	}
+	return luo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (luo *LootUpdateOne) SetUpdatedAt(t time.Time) *LootUpdateOne {
+	luo.mutation.SetUpdatedAt(t)
+	return luo
+}
+
+// SetObtainedAt sets the "obtained_at" field.
+func (luo *LootUpdateOne) SetObtainedAt(t time.Time) *LootUpdateOne {
+	luo.mutation.SetObtainedAt(t)
+	return luo
+}
+
+// SetNillableObtainedAt sets the "obtained_at" field if the given value is not nil.
+func (luo *LootUpdateOne) SetNillableObtainedAt(t *time.Time) *LootUpdateOne {
+	if t != nil {
+		luo.SetObtainedAt(*t)
+	}
+	return luo
+}
+
+// ClearObtainedAt clears the value of the "obtained_at" field.
+func (luo *LootUpdateOne) ClearObtainedAt() *LootUpdateOne {
+	luo.mutation.ClearObtainedAt()
 	return luo
 }
 
@@ -201,6 +524,7 @@ func (luo *LootUpdateOne) Save(ctx context.Context) (*Loot, error) {
 		err  error
 		node *Loot
 	)
+	luo.defaults()
 	if len(luo.hooks) == 0 {
 		if err = luo.check(); err != nil {
 			return nil, err
@@ -255,16 +579,39 @@ func (luo *LootUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (luo *LootUpdateOne) defaults() {
+	if _, ok := luo.mutation.UpdatedAt(); !ok {
+		v := loot.UpdateDefaultUpdatedAt()
+		luo.mutation.SetUpdatedAt(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (luo *LootUpdateOne) check() error {
-	if v, ok := luo.mutation.Name(); ok {
-		if err := loot.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Loot.name": %w`, err)}
+	if v, ok := luo.mutation.PlayerName(); ok {
+		if err := loot.PlayerNameValidator(v); err != nil {
+			return &ValidationError{Name: "player_name", err: fmt.Errorf(`ent: validator failed for field "Loot.player_name": %w`, err)}
+		}
+	}
+	if v, ok := luo.mutation.PlayerServer(); ok {
+		if err := loot.PlayerServerValidator(v); err != nil {
+			return &ValidationError{Name: "player_server", err: fmt.Errorf(`ent: validator failed for field "Loot.player_server": %w`, err)}
 		}
 	}
 	if v, ok := luo.mutation.Role(); ok {
 		if err := loot.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`ent: validator failed for field "Loot.role": %w`, err)}
+		}
+	}
+	if v, ok := luo.mutation.Job(); ok {
+		if err := loot.JobValidator(v); err != nil {
+			return &ValidationError{Name: "job", err: fmt.Errorf(`ent: validator failed for field "Loot.job": %w`, err)}
+		}
+	}
+	if v, ok := luo.mutation.Category(); ok {
+		if err := loot.CategoryValidator(v); err != nil {
+			return &ValidationError{Name: "category", err: fmt.Errorf(`ent: validator failed for field "Loot.category": %w`, err)}
 		}
 	}
 	return nil
@@ -305,11 +652,32 @@ func (luo *LootUpdateOne) sqlSave(ctx context.Context) (_node *Loot, err error) 
 			}
 		}
 	}
-	if value, ok := luo.mutation.Name(); ok {
+	if value, ok := luo.mutation.PlayerName(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: loot.FieldName,
+			Column: loot.FieldPlayerName,
+		})
+	}
+	if value, ok := luo.mutation.PlayerServer(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: loot.FieldPlayerServer,
+		})
+	}
+	if value, ok := luo.mutation.PartyID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: loot.FieldPartyID,
+		})
+	}
+	if value, ok := luo.mutation.AddedPartyID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: loot.FieldPartyID,
 		})
 	}
 	if value, ok := luo.mutation.Role(); ok {
@@ -317,6 +685,75 @@ func (luo *LootUpdateOne) sqlSave(ctx context.Context) (_node *Loot, err error) 
 			Type:   field.TypeEnum,
 			Value:  value,
 			Column: loot.FieldRole,
+		})
+	}
+	if value, ok := luo.mutation.Job(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeEnum,
+			Value:  value,
+			Column: loot.FieldJob,
+		})
+	}
+	if value, ok := luo.mutation.Category(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeEnum,
+			Value:  value,
+			Column: loot.FieldCategory,
+		})
+	}
+	if value, ok := luo.mutation.ItemID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: loot.FieldItemID,
+		})
+	}
+	if value, ok := luo.mutation.AddedItemID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt64,
+			Value:  value,
+			Column: loot.FieldItemID,
+		})
+	}
+	if value, ok := luo.mutation.ItemName(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: loot.FieldItemName,
+		})
+	}
+	if value, ok := luo.mutation.IsObtained(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: loot.FieldIsObtained,
+		})
+	}
+	if value, ok := luo.mutation.CreatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: loot.FieldCreatedAt,
+		})
+	}
+	if value, ok := luo.mutation.UpdatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: loot.FieldUpdatedAt,
+		})
+	}
+	if value, ok := luo.mutation.ObtainedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: loot.FieldObtainedAt,
+		})
+	}
+	if luo.mutation.ObtainedAtCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Column: loot.FieldObtainedAt,
 		})
 	}
 	_node = &Loot{config: luo.config}
