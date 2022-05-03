@@ -108,7 +108,7 @@ func PlayerServer(v string) predicate.Loot {
 }
 
 // PartyID applies equality check predicate on the "party_id" field. It's identical to PartyIDEQ.
-func PartyID(v int64) predicate.Loot {
+func PartyID(v string) predicate.Loot {
 	return predicate.Loot(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldPartyID), v))
 	})
@@ -379,21 +379,21 @@ func PlayerServerContainsFold(v string) predicate.Loot {
 }
 
 // PartyIDEQ applies the EQ predicate on the "party_id" field.
-func PartyIDEQ(v int64) predicate.Loot {
+func PartyIDEQ(v string) predicate.Loot {
 	return predicate.Loot(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldPartyID), v))
 	})
 }
 
 // PartyIDNEQ applies the NEQ predicate on the "party_id" field.
-func PartyIDNEQ(v int64) predicate.Loot {
+func PartyIDNEQ(v string) predicate.Loot {
 	return predicate.Loot(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldPartyID), v))
 	})
 }
 
 // PartyIDIn applies the In predicate on the "party_id" field.
-func PartyIDIn(vs ...int64) predicate.Loot {
+func PartyIDIn(vs ...string) predicate.Loot {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -410,7 +410,7 @@ func PartyIDIn(vs ...int64) predicate.Loot {
 }
 
 // PartyIDNotIn applies the NotIn predicate on the "party_id" field.
-func PartyIDNotIn(vs ...int64) predicate.Loot {
+func PartyIDNotIn(vs ...string) predicate.Loot {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -427,30 +427,65 @@ func PartyIDNotIn(vs ...int64) predicate.Loot {
 }
 
 // PartyIDGT applies the GT predicate on the "party_id" field.
-func PartyIDGT(v int64) predicate.Loot {
+func PartyIDGT(v string) predicate.Loot {
 	return predicate.Loot(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldPartyID), v))
 	})
 }
 
 // PartyIDGTE applies the GTE predicate on the "party_id" field.
-func PartyIDGTE(v int64) predicate.Loot {
+func PartyIDGTE(v string) predicate.Loot {
 	return predicate.Loot(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldPartyID), v))
 	})
 }
 
 // PartyIDLT applies the LT predicate on the "party_id" field.
-func PartyIDLT(v int64) predicate.Loot {
+func PartyIDLT(v string) predicate.Loot {
 	return predicate.Loot(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldPartyID), v))
 	})
 }
 
 // PartyIDLTE applies the LTE predicate on the "party_id" field.
-func PartyIDLTE(v int64) predicate.Loot {
+func PartyIDLTE(v string) predicate.Loot {
 	return predicate.Loot(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldPartyID), v))
+	})
+}
+
+// PartyIDContains applies the Contains predicate on the "party_id" field.
+func PartyIDContains(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldPartyID), v))
+	})
+}
+
+// PartyIDHasPrefix applies the HasPrefix predicate on the "party_id" field.
+func PartyIDHasPrefix(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldPartyID), v))
+	})
+}
+
+// PartyIDHasSuffix applies the HasSuffix predicate on the "party_id" field.
+func PartyIDHasSuffix(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldPartyID), v))
+	})
+}
+
+// PartyIDEqualFold applies the EqualFold predicate on the "party_id" field.
+func PartyIDEqualFold(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldPartyID), v))
+	})
+}
+
+// PartyIDContainsFold applies the ContainsFold predicate on the "party_id" field.
+func PartyIDContainsFold(v string) predicate.Loot {
+	return predicate.Loot(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldPartyID), v))
 	})
 }
 

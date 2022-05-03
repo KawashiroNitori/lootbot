@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/KawashiroNitori/lootbot/ent/loot"
+	"github.com/KawashiroNitori/lootbot/ent/party"
 	"github.com/KawashiroNitori/lootbot/ent/predicate"
 	"github.com/KawashiroNitori/lootbot/internal/macro"
 
@@ -25,7 +26,8 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeLoot = "Loot"
+	TypeLoot  = "Loot"
+	TypeParty = "Party"
 )
 
 // LootMutation represents an operation that mutates the Loot nodes in the graph.
@@ -36,8 +38,7 @@ type LootMutation struct {
 	id            *int64
 	player_name   *string
 	player_server *string
-	party_id      *int64
-	addparty_id   *int64
+	party_id      *string
 	role          *macro.Role
 	job           *macro.Job
 	category      *macro.Category
@@ -231,13 +232,12 @@ func (m *LootMutation) ResetPlayerServer() {
 }
 
 // SetPartyID sets the "party_id" field.
-func (m *LootMutation) SetPartyID(i int64) {
-	m.party_id = &i
-	m.addparty_id = nil
+func (m *LootMutation) SetPartyID(s string) {
+	m.party_id = &s
 }
 
 // PartyID returns the value of the "party_id" field in the mutation.
-func (m *LootMutation) PartyID() (r int64, exists bool) {
+func (m *LootMutation) PartyID() (r string, exists bool) {
 	v := m.party_id
 	if v == nil {
 		return
@@ -248,7 +248,7 @@ func (m *LootMutation) PartyID() (r int64, exists bool) {
 // OldPartyID returns the old "party_id" field's value of the Loot entity.
 // If the Loot object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *LootMutation) OldPartyID(ctx context.Context) (v int64, err error) {
+func (m *LootMutation) OldPartyID(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldPartyID is only allowed on UpdateOne operations")
 	}
@@ -262,28 +262,9 @@ func (m *LootMutation) OldPartyID(ctx context.Context) (v int64, err error) {
 	return oldValue.PartyID, nil
 }
 
-// AddPartyID adds i to the "party_id" field.
-func (m *LootMutation) AddPartyID(i int64) {
-	if m.addparty_id != nil {
-		*m.addparty_id += i
-	} else {
-		m.addparty_id = &i
-	}
-}
-
-// AddedPartyID returns the value that was added to the "party_id" field in this mutation.
-func (m *LootMutation) AddedPartyID() (r int64, exists bool) {
-	v := m.addparty_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ResetPartyID resets all changes to the "party_id" field.
 func (m *LootMutation) ResetPartyID() {
 	m.party_id = nil
-	m.addparty_id = nil
 }
 
 // SetRole sets the "role" field.
@@ -788,7 +769,7 @@ func (m *LootMutation) SetField(name string, value ent.Value) error {
 		m.SetPlayerServer(v)
 		return nil
 	case loot.FieldPartyID:
-		v, ok := value.(int64)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -865,9 +846,6 @@ func (m *LootMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *LootMutation) AddedFields() []string {
 	var fields []string
-	if m.addparty_id != nil {
-		fields = append(fields, loot.FieldPartyID)
-	}
 	if m.additem_id != nil {
 		fields = append(fields, loot.FieldItemID)
 	}
@@ -879,8 +857,6 @@ func (m *LootMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *LootMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case loot.FieldPartyID:
-		return m.AddedPartyID()
 	case loot.FieldItemID:
 		return m.AddedItemID()
 	}
@@ -892,13 +868,6 @@ func (m *LootMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *LootMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case loot.FieldPartyID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddPartyID(v)
-		return nil
 	case loot.FieldItemID:
 		v, ok := value.(int64)
 		if !ok {
@@ -1028,4 +997,321 @@ func (m *LootMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *LootMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Loot edge %s", name)
+}
+
+// PartyMutation represents an operation that mutates the Party nodes in the graph.
+type PartyMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *string
+	channel_id    *string
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*Party, error)
+	predicates    []predicate.Party
+}
+
+var _ ent.Mutation = (*PartyMutation)(nil)
+
+// partyOption allows management of the mutation configuration using functional options.
+type partyOption func(*PartyMutation)
+
+// newPartyMutation creates new mutation for the Party entity.
+func newPartyMutation(c config, op Op, opts ...partyOption) *PartyMutation {
+	m := &PartyMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeParty,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withPartyID sets the ID field of the mutation.
+func withPartyID(id string) partyOption {
+	return func(m *PartyMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Party
+		)
+		m.oldValue = func(ctx context.Context) (*Party, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Party.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withParty sets the old Party of the mutation.
+func withParty(node *Party) partyOption {
+	return func(m *PartyMutation) {
+		m.oldValue = func(context.Context) (*Party, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m PartyMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m PartyMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Party entities.
+func (m *PartyMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *PartyMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *PartyMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Party.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetChannelID sets the "channel_id" field.
+func (m *PartyMutation) SetChannelID(s string) {
+	m.channel_id = &s
+}
+
+// ChannelID returns the value of the "channel_id" field in the mutation.
+func (m *PartyMutation) ChannelID() (r string, exists bool) {
+	v := m.channel_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldChannelID returns the old "channel_id" field's value of the Party entity.
+// If the Party object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PartyMutation) OldChannelID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldChannelID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldChannelID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldChannelID: %w", err)
+	}
+	return oldValue.ChannelID, nil
+}
+
+// ResetChannelID resets all changes to the "channel_id" field.
+func (m *PartyMutation) ResetChannelID() {
+	m.channel_id = nil
+}
+
+// Where appends a list predicates to the PartyMutation builder.
+func (m *PartyMutation) Where(ps ...predicate.Party) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *PartyMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (Party).
+func (m *PartyMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *PartyMutation) Fields() []string {
+	fields := make([]string, 0, 1)
+	if m.channel_id != nil {
+		fields = append(fields, party.FieldChannelID)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *PartyMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case party.FieldChannelID:
+		return m.ChannelID()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *PartyMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case party.FieldChannelID:
+		return m.OldChannelID(ctx)
+	}
+	return nil, fmt.Errorf("unknown Party field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PartyMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case party.FieldChannelID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetChannelID(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Party field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *PartyMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *PartyMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PartyMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Party numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *PartyMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *PartyMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *PartyMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown Party nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *PartyMutation) ResetField(name string) error {
+	switch name {
+	case party.FieldChannelID:
+		m.ResetChannelID()
+		return nil
+	}
+	return fmt.Errorf("unknown Party field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *PartyMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *PartyMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *PartyMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *PartyMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *PartyMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *PartyMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *PartyMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown Party unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *PartyMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown Party edge %s", name)
 }

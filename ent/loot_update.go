@@ -42,15 +42,8 @@ func (lu *LootUpdate) SetPlayerServer(s string) *LootUpdate {
 }
 
 // SetPartyID sets the "party_id" field.
-func (lu *LootUpdate) SetPartyID(i int64) *LootUpdate {
-	lu.mutation.ResetPartyID()
-	lu.mutation.SetPartyID(i)
-	return lu
-}
-
-// AddPartyID adds i to the "party_id" field.
-func (lu *LootUpdate) AddPartyID(i int64) *LootUpdate {
-	lu.mutation.AddPartyID(i)
+func (lu *LootUpdate) SetPartyID(s string) *LootUpdate {
+	lu.mutation.SetPartyID(s)
 	return lu
 }
 
@@ -283,14 +276,7 @@ func (lu *LootUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := lu.mutation.PartyID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: loot.FieldPartyID,
-		})
-	}
-	if value, ok := lu.mutation.AddedPartyID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeString,
 			Value:  value,
 			Column: loot.FieldPartyID,
 		})
@@ -403,15 +389,8 @@ func (luo *LootUpdateOne) SetPlayerServer(s string) *LootUpdateOne {
 }
 
 // SetPartyID sets the "party_id" field.
-func (luo *LootUpdateOne) SetPartyID(i int64) *LootUpdateOne {
-	luo.mutation.ResetPartyID()
-	luo.mutation.SetPartyID(i)
-	return luo
-}
-
-// AddPartyID adds i to the "party_id" field.
-func (luo *LootUpdateOne) AddPartyID(i int64) *LootUpdateOne {
-	luo.mutation.AddPartyID(i)
+func (luo *LootUpdateOne) SetPartyID(s string) *LootUpdateOne {
+	luo.mutation.SetPartyID(s)
 	return luo
 }
 
@@ -668,14 +647,7 @@ func (luo *LootUpdateOne) sqlSave(ctx context.Context) (_node *Loot, err error) 
 	}
 	if value, ok := luo.mutation.PartyID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: loot.FieldPartyID,
-		})
-	}
-	if value, ok := luo.mutation.AddedPartyID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeString,
 			Value:  value,
 			Column: loot.FieldPartyID,
 		})

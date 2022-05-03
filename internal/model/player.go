@@ -43,8 +43,17 @@ type PlayerNeedInfo struct {
 
 func (p *PlayerNeedInfo) NeedScore() float64 {
 	if p.All == 0 {
-		return 0
+		return -1
 	}
 	left := p.All - p.Obtained
 	return float64(left) / float64(p.All)
+}
+
+func (p *PlayerNeedInfo) NeedEmoji() string {
+	if p.Obtained == 0 {
+		return "✋"
+	} else if p.Obtained < p.All {
+		return "🔄"
+	}
+	return "✅"
 }

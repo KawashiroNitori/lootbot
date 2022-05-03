@@ -1,4 +1,4 @@
-//go:generate go run github.com/dmarkham/enumer -type Category -trimprefix Category -transform lower -sql -output category_string.go
+//go:generate go run github.com/dmarkham/enumer -type Category -trimprefix Category -transform lower -sql -json -output category_string.go
 package macro
 
 type Category int
@@ -9,7 +9,7 @@ const (
 	CategoryCoffer                 // 装备箱
 	CategoryCoating                // 首饰药
 	CategoryTomestone              // 神典石
-	CategoryRoborant               // 强化药
+	CategoryRoborant               // 武器药
 	CategorySpool                  // 纤维
 	CategoryMount                  // 坐骑
 	CategoryOrchestraRoll          // 乐谱
@@ -21,7 +21,7 @@ var _categoryNameMap = map[Category]string{
 	CategoryCoffer:        "装备箱",
 	CategoryCoating:       "首饰药",
 	CategoryTomestone:     "神典石",
-	CategoryRoborant:      "强化药",
+	CategoryRoborant:      "武器药",
 	CategorySpool:         "纤维",
 	CategoryMount:         "坐骑",
 	CategoryOrchestraRoll: "乐谱",

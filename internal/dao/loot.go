@@ -3,6 +3,7 @@ package dao
 import (
 	"context"
 	"sort"
+	"time"
 
 	"github.com/KawashiroNitori/lootbot/ent"
 	"github.com/KawashiroNitori/lootbot/ent/loot"
@@ -12,18 +13,15 @@ import (
 	"github.com/samber/lo"
 )
 
-type Loot struct {
-	ID int64 `json:"id"`
-}
-
 type LootDAO interface {
-	CreateLoot(ctx context.Context, partyID int64, playerName, playerServer string, role macro.Role, job macro.Job, category macro.Category, itemID int64, itemName string) (*ent.Loot, error)
+	CreateLoot(ctx context.Context, partyID, playerName, playerServer string, role macro.Role, job macro.Job, category macro.Category, itemID int64, itemName string) (*ent.Loot, error)
 
-	GetPlayerLoot(ctx context.Context, partyID int64, playerName, playerServer string) *model.PlayerLootInfo
-	GetPartyLoot(ctx context.Context, partyID int64) []*model.PlayerLootInfo
-	GetNeedInfoByItemID(ctx context.Context, partyID, itemID int64) []*model.PlayerLootInfo
+	GetPlayerLoot(ctx context.Context, partyID, playerName, playerServer string) *model.PlayerLootInfo
+	GetPartyLoot(ctx context.Context, partyID string) []*model.PlayerLootInfo
+	GetNeedInfoByItemID(ctx context.Context, partyID string, itemID int64) []*model.PlayerLootInfo
 
-	ObtainLoot(ctx context.Context, partyID int64, playerName, playerServer string, itemID int64) (*ent.Loot, error)
+	ObtainLoot(ctx context.Context, partyID, playerName, playerServer string, itemID int64) (*ent.Loot, error)
+	ClearPartyLoots(ctx context.Context, partyID string) error
 }
 
 type LootDAOImpl struct {
@@ -41,8 +39,8 @@ var (
 	_              LootDAO = (*LootDAOImpl)(nil)
 )
 
-func (d *LootDAOImpl) CreateLoot(ctx context.Context, partyID int64, playerName, playerServer string, role macro.Role, job macro.Job, category macro.Category, itemID int64, itemName string) (*ent.Loot, error) {
-	loot, err := d.client.Loot.
+func (d *LootDAOImpl) CreateLoot(ctx context.Context, partyID, playerName, playerServer string, role macro.Role, job macro.Job, category macro.Category, itemID int64, itemName string) (*ent.Loot, error) {
+	lt, err := d.client.Loot.
 		Create().
 		SetPlayerName(playerName).
 		SetPlayerServer(playerServer).
@@ -53,10 +51,10 @@ func (d *LootDAOImpl) CreateLoot(ctx context.Context, partyID int64, playerName,
 		SetItemID(itemID).
 		SetItemName(itemName).
 		Save(ctx)
-	return loot, err
+	return lt, err
 }
 
-func (d *LootDAOImpl) GetPlayerLoot(ctx context.Context, partyID int64, playerName, playerServer string) *model.PlayerLootInfo {
+func (d *LootDAOImpl) GetPlayerLoot(ctx context.Context, partyID, playerName, playerServer string) *model.PlayerLootInfo {
 	loots := d.client.Loot.
 		Query().
 		Where(
@@ -76,7 +74,7 @@ func (d *LootDAOImpl) GetPlayerLoot(ctx context.Context, partyID int64, playerNa
 	return nil
 }
 
-func (d *LootDAOImpl) GetPartyLoot(ctx context.Context, partyID int64) []*model.PlayerLootInfo {
+func (d *LootDAOImpl) GetPartyLoot(ctx context.Context, partyID string) []*model.PlayerLootInfo {
 	loots := d.client.Loot.
 		Query().
 		Where(loot.PartyID(partyID)).
@@ -115,7 +113,7 @@ func (d *LootDAOImpl) formatPlayerLootInfo(ctx context.Context, loots []*ent.Loo
 	return m
 }
 
-func (d *LootDAOImpl) GetNeedInfoByItemID(ctx context.Context, partyID, itemID int64) []*model.PlayerLootInfo {
+func (d *LootDAOImpl) GetNeedInfoByItemID(ctx context.Context, partyID string, itemID int64) []*model.PlayerLootInfo {
 	loots := d.client.Loot.
 		Query().
 		Where(
@@ -129,7 +127,7 @@ func (d *LootDAOImpl) GetNeedInfoByItemID(ctx context.Context, partyID, itemID i
 	return lootInfos
 }
 
-func (d *LootDAOImpl) ObtainLoot(ctx context.Context, partyID int64, playerName, playerServer string, itemID int64) (*ent.Loot, error) {
+func (d *LootDAOImpl) ObtainLoot(ctx context.Context, partyID, playerName, playerServer string, itemID int64) (*ent.Loot, error) {
 	lt := d.client.Loot.
 		Query().
 		Where(
@@ -145,6 +143,15 @@ func (d *LootDAOImpl) ObtainLoot(ctx context.Context, partyID int64, playerName,
 	}
 	lt, err := lt.Update().
 		SetIsObtained(true).
+		SetObtainedAt(time.Now()).
 		Save(ctx)
 	return lt, err
+}
+
+func (d *LootDAOImpl) ClearPartyLoots(ctx context.Context, partyID string) error {
+	_, err := d.client.Loot.
+		Delete().
+		Where(loot.PartyID(partyID)).
+		Exec(ctx)
+	return err
 }

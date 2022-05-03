@@ -1,4 +1,4 @@
-//go:generate go run github.com/dmarkham/enumer -type Role -trimprefix Role -transform upper -sql -output role_string.go
+//go:generate go run github.com/dmarkham/enumer -type Role -trimprefix Role -transform upper -sql -json -output role_string.go
 package macro
 
 type Role int

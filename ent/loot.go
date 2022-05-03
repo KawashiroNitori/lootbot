@@ -22,7 +22,7 @@ type Loot struct {
 	// PlayerServer holds the value of the "player_server" field.
 	PlayerServer string `json:"player_server,omitempty"`
 	// PartyID holds the value of the "party_id" field.
-	PartyID int64 `json:"party_id,omitempty"`
+	PartyID string `json:"party_id,omitempty"`
 	// Role holds the value of the "role" field.
 	Role macro.Role `json:"role,omitempty"`
 	// Job holds the value of the "job" field.
@@ -56,9 +56,9 @@ func (*Loot) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new(macro.Role)
 		case loot.FieldIsObtained:
 			values[i] = new(sql.NullBool)
-		case loot.FieldID, loot.FieldPartyID, loot.FieldItemID:
+		case loot.FieldID, loot.FieldItemID:
 			values[i] = new(sql.NullInt64)
-		case loot.FieldPlayerName, loot.FieldPlayerServer, loot.FieldItemName:
+		case loot.FieldPlayerName, loot.FieldPlayerServer, loot.FieldPartyID, loot.FieldItemName:
 			values[i] = new(sql.NullString)
 		case loot.FieldCreatedAt, loot.FieldUpdatedAt, loot.FieldObtainedAt:
 			values[i] = new(sql.NullTime)
@@ -96,10 +96,10 @@ func (l *Loot) assignValues(columns []string, values []interface{}) error {
 				l.PlayerServer = value.String
 			}
 		case loot.FieldPartyID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field party_id", values[i])
 			} else if value.Valid {
-				l.PartyID = value.Int64
+				l.PartyID = value.String
 			}
 		case loot.FieldRole:
 			if value, ok := values[i].(*macro.Role); !ok {
@@ -189,7 +189,7 @@ func (l *Loot) String() string {
 	builder.WriteString(", player_server=")
 	builder.WriteString(l.PlayerServer)
 	builder.WriteString(", party_id=")
-	builder.WriteString(fmt.Sprintf("%v", l.PartyID))
+	builder.WriteString(l.PartyID)
 	builder.WriteString(", role=")
 	builder.WriteString(fmt.Sprintf("%v", l.Role))
 	builder.WriteString(", job=")

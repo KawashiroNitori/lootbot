@@ -22,6 +22,19 @@ func (f LootFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error)
 	return f(ctx, mv)
 }
 
+// The PartyFunc type is an adapter to allow the use of ordinary
+// function as Party mutator.
+type PartyFunc func(context.Context, *ent.PartyMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PartyFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.PartyMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PartyMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // Condition is a hook condition function.
 type Condition func(context.Context, ent.Mutation) bool
 

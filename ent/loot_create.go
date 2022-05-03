@@ -34,8 +34,8 @@ func (lc *LootCreate) SetPlayerServer(s string) *LootCreate {
 }
 
 // SetPartyID sets the "party_id" field.
-func (lc *LootCreate) SetPartyID(i int64) *LootCreate {
-	lc.mutation.SetPartyID(i)
+func (lc *LootCreate) SetPartyID(s string) *LootCreate {
+	lc.mutation.SetPartyID(s)
 	return lc
 }
 
@@ -327,7 +327,7 @@ func (lc *LootCreate) createSpec() (*Loot, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := lc.mutation.PartyID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeString,
 			Value:  value,
 			Column: loot.FieldPartyID,
 		})

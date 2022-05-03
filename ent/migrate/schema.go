@@ -13,7 +13,7 @@ var (
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "player_name", Type: field.TypeString},
 		{Name: "player_server", Type: field.TypeString},
-		{Name: "party_id", Type: field.TypeInt64},
+		{Name: "party_id", Type: field.TypeString},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"D1", "D2", "D3", "D4", "MT", "ST", "H1", "H2"}},
 		{Name: "job", Type: field.TypeEnum, Enums: []string{"GLD", "PGL", "MRD", "LNC", "ARC", "CNJ", "THM", "CRP", "BSM", "ARM", "GSM", "LTW", "WVR", "ALC", "CUL", "MIN", "BTN", "FSH", "PLD", "MNK", "WAR", "DRG", "BRD", "WHM", "BLM", "ACN", "SMN", "SCH", "ROG", "NIN", "MCH", "DRK", "AST", "SAM", "RDM", "BLU", "GNB", "DNC", "RPR", "SGE"}},
 		{Name: "category", Type: field.TypeEnum, Enums: []string{"weapon", "coffer", "coating", "tomestone", "roborant", "spool", "mount", "orchestraroll", "companion"}},
@@ -37,9 +37,21 @@ var (
 			},
 		},
 	}
+	// PartiesColumns holds the columns for the "parties" table.
+	PartiesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "channel_id", Type: field.TypeString},
+	}
+	// PartiesTable holds the schema information for the "parties" table.
+	PartiesTable = &schema.Table{
+		Name:       "parties",
+		Columns:    PartiesColumns,
+		PrimaryKey: []*schema.Column{PartiesColumns[0]},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		LootsTable,
+		PartiesTable,
 	}
 )
 

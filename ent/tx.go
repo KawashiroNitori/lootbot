@@ -14,6 +14,8 @@ type Tx struct {
 	config
 	// Loot is the client for interacting with the Loot builders.
 	Loot *LootClient
+	// Party is the client for interacting with the Party builders.
+	Party *PartyClient
 
 	// lazily loaded.
 	client     *Client
@@ -150,6 +152,7 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.Loot = NewLootClient(tx.config)
+	tx.Party = NewPartyClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

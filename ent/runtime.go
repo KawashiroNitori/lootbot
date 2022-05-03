@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/KawashiroNitori/lootbot/ent/loot"
+	"github.com/KawashiroNitori/lootbot/ent/party"
 	"github.com/KawashiroNitori/lootbot/ent/schema"
 )
 
@@ -37,4 +38,10 @@ func init() {
 	loot.DefaultUpdatedAt = lootDescUpdatedAt.Default.(func() time.Time)
 	// loot.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	loot.UpdateDefaultUpdatedAt = lootDescUpdatedAt.UpdateDefault.(func() time.Time)
+	partyFields := schema.Party{}.Fields()
+	_ = partyFields
+	// partyDescID is the schema descriptor for id field.
+	partyDescID := partyFields[0].Descriptor()
+	// party.DefaultID holds the default value on creation for the id field.
+	party.DefaultID = partyDescID.Default.(func() string)
 }

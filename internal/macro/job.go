@@ -1,5 +1,7 @@
-//go:generate go run github.com/dmarkham/enumer -type Job -trimprefix Job -transform upper -sql -output job_string.go
+//go:generate go run github.com/dmarkham/enumer -type Job -trimprefix Job -transform upper -sql -json -output job_string.go
 package macro
+
+import "fmt"
 
 type Job int
 
@@ -139,6 +141,24 @@ func (i Job) Name() string {
 
 func (i Job) FullName() string {
 	return _jobFullNameMap[i]
+}
+
+func JobNameString(name string) (Job, error) {
+	for i, n := range _jobNameMap {
+		if n == name {
+			return i, nil
+		}
+	}
+	return Job(0), fmt.Errorf("%s does not belong to Role values", name)
+}
+
+func JobFullNameString(fullName string) (Job, error) {
+	for i, n := range _jobFullNameMap {
+		if n == fullName {
+			return i, nil
+		}
+	}
+	return Job(0), fmt.Errorf("%s does not belong to Role values", fullName)
 }
 
 func (i Job) Values() []string {

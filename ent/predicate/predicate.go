@@ -8,3 +8,6 @@ import (
 
 // Loot is the predicate function for loot builders.
 type Loot func(*sql.Selector)
+
+// Party is the predicate function for party builders.
+type Party func(*sql.Selector)

@@ -20,7 +20,7 @@ func (Loot) Fields() []ent.Field {
 		field.Int64("id"),
 		field.String("player_name").NotEmpty(),
 		field.String("player_server").NotEmpty(),
-		field.Int64("party_id"),
+		field.String("party_id"),
 		field.Enum("role").GoType(macro.Role(0)),
 		field.Enum("job").GoType(macro.Job(0)),
 		field.Enum("category").GoType(macro.Category(0)),
